@@ -1,24 +1,7 @@
-#include <iostream>
-#include <string>
-#include <conio.h>
-#include <random>
 
-class Dice
-{
-public:
-	int Roll( int nDice )
-	{
-		int total = 0;
-		for( int n = 0; n < nDice; n++ )
-		{
-			total += d6( rng );
-		}
-		return total;
-	}
-private:
-	std::uniform_int_distribution<int> d6 = std::uniform_int_distribution<int>( 1,6 );
-	std::mt19937 rng = std::mt19937( std::random_device{}() );
-};
+#include "Memefighter.h"
+
+
 
 void Engage( MemeFighter& f1,MemeFighter& f2 )
 {
@@ -37,7 +20,7 @@ void Engage( MemeFighter& f1,MemeFighter& f2 )
 
 int main()
 {
-	MemeFrog f1( "Dat Boi" );
+	MemeFrog f1(   "Dat Boi......" );
 	MemeStoner f2( "Good Guy Greg" );
 
 	while( f1.IsAlive() && f2.IsAlive() )
