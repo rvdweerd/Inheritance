@@ -66,6 +66,7 @@ public:
 		return speed + Roll(2);
 		
 	}
+	virtual void SpecialMove(MemeFighter& target) = 0;
 	void Punch(MemeFighter& target)
 	{
 		if (this->IsAlive())
@@ -123,7 +124,9 @@ public:
 	MemeFrog(std::string name)
 		:
 		MemeFighter(name, 69, 7, 14)
-	{}
+	{
+		std::cout << "Memefrog " << name << " enters the ring.\n";
+	}
 	void Turn()
 	{
 		if (this->IsAlive())
@@ -137,7 +140,7 @@ public:
 			std::cout << *this << " dies.";
 		}
 	}
-	void SpecialMove(MemeFighter& target)
+	void SpecialMove(MemeFighter& target) override
 	{
 		if (this->IsAlive())
 		{
@@ -162,14 +165,6 @@ public:
 			this->Turn();
 		}
 	}
-	void Punch(MemeFighter& mf)
-	{
-		MemeFighter::Punch(mf);
-		if (this->IsAlive())
-		{
-			this->Turn();
-		}
-	}
 };
 
 class MemeStoner : public MemeFighter
@@ -178,8 +173,10 @@ public:
 	MemeStoner(std::string name)
 		:
 		MemeFighter(name, 80, 4, 10)
-	{}
-	void SpecialMove()
+	{
+		std::cout << "Memestoner " << name << " enters the ring.\n";
+	}
+	void SpecialMove(MemeFighter& target) override
 	{
 		if (this->IsAlive())
 		{
@@ -194,5 +191,4 @@ public:
 			}
 		}
 	}
-
 };

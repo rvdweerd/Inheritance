@@ -18,18 +18,35 @@ void Engage( MemeFighter& f1,MemeFighter& f2 )
 	p2->Punch( *p1 );
 }
 
+void EngageSpecial(MemeFighter& f1, MemeFighter& f2)
+{
+	// pointers for sorting purposes
+	auto* p1 = &f1;
+	auto* p2 = &f2;
+
+	// determine attack order
+	if (p1->GetInitiative() < p2->GetInitiative())
+	{
+		std::swap(p1, p2);
+	}
+	// execute attacks
+	p1->SpecialMove(*p2);
+	p2->SpecialMove(*p1);
+}
+
+
 int main()
 {
 	MemeFrog f1(   "Dat Boi......" );
 	MemeStoner f2( "Good Guy Greg" );
+	
 
 	while( f1.IsAlive() && f2.IsAlive() )
 	{
 		// trade blows
 		Engage( f1,f2 );
 		// special moves
-		f2.SpecialMove();
-		f1.SpecialMove( f2 );
+		EngageSpecial(f2, f1);
 		// end of turn maintainence
 		f1.Tick();
 		f2.Tick();
