@@ -32,7 +32,7 @@ public:
 	{
 		return name;
 	}
-	int GetRank() const
+	const int GetRank() const
 	{
 		return rank;
 	}

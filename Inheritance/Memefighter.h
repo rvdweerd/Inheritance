@@ -74,7 +74,7 @@ public:
 	{
 		return pWeapon != nullptr;
 	}
-	Weapon& GetWeapon() const
+	const Weapon& GetWeapon() const
 	{
 		return *pWeapon;
 	}
