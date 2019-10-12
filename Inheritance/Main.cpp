@@ -3,6 +3,17 @@
 #include <vector>
 #include <random>
 
+void TakeWeaponIfDead(MemeFighter& taker, MemeFighter& giver)
+{
+	if (taker.IsAlive() && !giver.IsAlive() && giver.HasWeapon())
+	{
+		if (taker.GetWeapon().GetRank() < giver.GetWeapon.GetRank())
+		{
+			std::cout << taker << " takes the " << giver.GetWeapon.GetName() << " from " << giver << "'s still cooling body.\nOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n";
+			taker.GiveWeapon(giver.PilferWeapon());
+		}
+	}
+}
 
 void Engage( MemeFighter& f1,MemeFighter& f2 )
 {
@@ -15,8 +26,10 @@ void Engage( MemeFighter& f1,MemeFighter& f2 )
 		std::swap( p1,p2 );
 	}
 	// execute attacks
-	p1->Punch( *p2 );
-	p2->Punch( *p1 );
+	p1->Attack( *p2 );
+	TakeWeaponIfDead(*p1, *p2);
+	p2->Attack( *p1 );
+	TakeWeaponIfDead(*p2, *p1);
 }
 void EngageSpecial(MemeFighter& f1, MemeFighter& f2)
 {
@@ -31,17 +44,24 @@ void EngageSpecial(MemeFighter& f1, MemeFighter& f2)
 	}
 	// execute attacks
 	p1->SpecialMove(*p2);
+	TakeWeaponIfDead(*p1, *p2);
 	p2->SpecialMove(*p1);
+	TakeWeaponIfDead(*p2, *p1);
+
 }
 
 int main()
 {
-	std::vector<MemeFighter*> team1 = { new MemeFrog("M Kermit The Frog"), new MemeStoner("M Sharon Stone"), new MemeStoner("M Sylvester Stonone") };
-	std::vector<MemeFighter*> team2 = { new MemeFrog("P Boris Frogston"), new MemeFrog("P Trump The Frog"), new MemeFrog("P Rutte The Frog") };
+	Weapon* pW = new Fist();
 
-
-	std::random_device rd;
-	std::mt19937 rng(rd());
+	std::vector<MemeFighter*> team1 = { 
+		new MemeFrog{"M Kermit The Frog", new Knife{} },
+		new MemeStoner("M Sharon Stone", new Fist ), 
+		new MemeStoner("M Sylvester Stonone", new Bat ) };
+	std::vector<MemeFighter*> team2 = { 
+		new MemeFrog("P Boris Frogston", new Knife()), 
+		new MemeFrog("P Trump The Frog", new Fist()), 
+		new MemeFrog("P Rutte The Frog", new Bat()) };
 
 	const auto alive_pred = [](MemeFighter* mf)->bool {return mf->IsAlive(); };
 	while(
@@ -66,8 +86,11 @@ int main()
 		{
 			std::cout << "\n...1-on-1 begins....................................................\n";
 			std::cout <<   "....................................................................\n";
-			Engage(*team1[i], *team2[i]);
-			EngageSpecial(*team1[i], *team2[i]);
+			if (team1[i]->IsAlive())
+			{
+				Engage(*team1[i], *team2[i]);
+				EngageSpecial(*team1[i], *team2[i]);
+			}
 			std::cout << "...1-on-1 ends......................................................\n"; 
 			std::cout << "....................................................................\n";
 		}
