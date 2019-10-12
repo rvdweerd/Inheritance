@@ -1,6 +1,7 @@
-
 #include "Memefighter.h"
-
+#include <algorithm>
+#include <vector>
+#include <random>
 
 
 void Engage( MemeFighter& f1,MemeFighter& f2 )
@@ -17,7 +18,6 @@ void Engage( MemeFighter& f1,MemeFighter& f2 )
 	p1->Punch( *p2 );
 	p2->Punch( *p1 );
 }
-
 void EngageSpecial(MemeFighter& f1, MemeFighter& f2)
 {
 	// pointers for sorting purposes
@@ -34,22 +34,63 @@ void EngageSpecial(MemeFighter& f1, MemeFighter& f2)
 	p2->SpecialMove(*p1);
 }
 
-
 int main()
 {
-	MemeFrog f1(   "Dat Boi......" );
-	MemeStoner f2( "Good Guy Greg" );
-	
+	std::vector<MemeFighter*> team1 = { new MemeFrog("M Kermit The Frog"), new MemeStoner("M Sharon Stone"), new MemeStoner("M Sylvester Stonone") };
+	std::vector<MemeFighter*> team2 = { new MemeFrog("P Boris Frogston"), new MemeFrog("P Trump The Frog"), new MemeFrog("P Rutte The Frog") };
 
-	while( f1.IsAlive() && f2.IsAlive() )
+
+	std::random_device rd;
+	std::mt19937 rng(rd());
+
+	const auto alive_pred = [](MemeFighter* mf)->bool {return mf->IsAlive(); };
+	while(
+		std::any_of(team1.begin(),team1.end(), alive_pred) && 
+		std::any_of(team2.begin(), team2.end(), alive_pred) )
 	{
-		// trade blows
-		Engage( f1,f2 );
-		// special moves
-		EngageSpecial(f2, f1);
+		
+		//Shufffle teams
+		std::random_shuffle(team1.begin(), team1.end()); 
+		std::random_shuffle(team2.begin(), team2.end());
+		//partition teams
+		std::partition(team1.begin(), team1.end(), alive_pred);
+		std::partition(team2.begin(), team2.end(), alive_pred);
+		
+		//fight!
+		//for (auto it1 = team1.begin(), it2 = team2.begin(); it1!=team1.end() && (*it1)->IsAlive(); ++it1, ++it2)
+		//{
+		//	Engage(**it1, **it2);
+		//	EngageSpecial(**it1, **it2);
+		//}
+		for (size_t i = 0; i < team1.size(); i++)
+		{
+			std::cout << "\n...1-on-1 begins....................................................\n";
+			std::cout <<   "....................................................................\n";
+			Engage(*team1[i], *team2[i]);
+			EngageSpecial(*team1[i], *team2[i]);
+			std::cout << "...1-on-1 ends......................................................\n"; 
+			std::cout << "....................................................................\n";
+		}
+				
 		// end of turn maintainence
-		f1.Tick();
-		f2.Tick();
+		std::cout << "\n...End of turn action begins......................................\n";
+		std::cout << "....................................................................\n";
+		//for (auto it1 = team1.begin(); it1 != team1.end() && (*it1)->IsAlive(); ++it1)
+		//{
+		//	(*it1)->Tick();
+		//}
+		//for (auto it2 = team2.begin(); it2 != team2.end() && (*it2)->IsAlive(); ++it2)
+		//{
+		//	(*it2)->Tick();
+		//}
+		for (size_t i = 0; i < team1.size(); i++)
+		{
+			team1[i]->Tick();
+			team2[i]->Tick();
+		}
+		std::cout << "...End of turn action ends..........................................\n";
+		std::cout << "....................................................................\n";
+
 
 		std::cout << "Press any key to continue...";
 		while( !_kbhit() );
@@ -57,14 +98,33 @@ int main()
 		std::cout << std::endl << std::endl;
 	}
 
-	if( f1.IsAlive() )
+	if( std::any_of(team1.begin(),team1.end(), alive_pred ) )
 	{
-		std::cout << f1.GetName() << " is victorious!";
+		std::cout << "Team 1 is victorious!, with"<< *team1[0] << *team1[1] << *team1[2]<<std::endl;
+		std::cout << "Team 2: "<< *team2[0] << *team2[1] << *team2[2] << std::endl;
 	}
 	else
 	{
-		std::cout << f2.GetName() << " is victorious!";
+		std::cout << "Team 2 is victorious!, with" << *team2[0] << *team2[1] << *team2[2] << std::endl;
+		std::cout << "Team 1: " << *team1[0] << *team1[1] << *team1[2] << std::endl;
+
 	}
+
+	//Free the memory
+	//for (MemeFighter* m : team1)
+	//{
+	//	delete m;
+	//}
+	//for (MemeFighter* m : team2)
+	//{
+	//	delete m;
+	//}
+	for (size_t i = 0; i < team1.size(); i++)
+	{
+		delete team1[i];
+		delete team2[i];
+	}
+
 	while( !_kbhit() );
 	return 0;
 }

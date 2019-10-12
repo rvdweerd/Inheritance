@@ -25,6 +25,10 @@ private:
 class MemeFighter
 {
 public:
+	virtual ~MemeFighter()
+	{
+		std::cout << "Destructing MemFighter " << name << std::endl;
+	}
 	bool IsAlive() const
 	{
 		return hp > 0;
@@ -45,7 +49,7 @@ public:
 		return name;
 	}
 	friend std::ostream& operator<<(std::ostream& os, const MemeFighter& mf);
-	void Tick()
+	virtual void Tick()
 	{
 		if (this->IsAlive())
 		{
@@ -96,7 +100,6 @@ protected:
 	{
 		if (this->IsAlive())
 		{
-			std::cout << *this << " special move succeeded, added hp (+" << hp_add << ") ,speed (+" << speed_add << "), power (*" << power_factor << ") \n";
 			name += name_append;
 			hp += hp_add;
 			speed += speed_add;
@@ -127,12 +130,23 @@ public:
 	{
 		std::cout << "Memefrog " << name << " enters the ring.\n";
 	}
-	void Turn()
+	~MemeFrog() override
+	{
+		std::cout << "MemFrog destructed\n";
+
+	}
+	void Tick() override
 	{
 		if (this->IsAlive())
 		{
+			std::cout << "======================================================newturn\n";
+			const int gain = Roll(1);
+			std::cout << *this << " recovers " << gain;
+			Add("",gain,0,1);
+			//std::cout << " (new hp=" << this.hp << ")" << std::endl;
+
 			int damage = Roll(1);
-			std::cout << "Turn over for ";
+			std::cout << "AIDS hits for ";
 			this->TakeDamage(damage);
 		}
 		if (!this->IsAlive())
@@ -146,7 +160,7 @@ public:
 		{
 			if (target.IsAlive())
 			{
-				std::cout << "======================================================newturn\n";
+				std::cout << "======================================================\n";
 				if (Roll(1) <= 2)
 				{
 					std::cout << *this << " Special move succeeded" << std::endl;
@@ -159,10 +173,9 @@ public:
 			}
 			else
 			{
-				std::cout << "======================================================newturn\n";
+				std::cout << "======================================================\n";
 				std::cout << *this << " is already dead.";
 			}
-			this->Turn();
 		}
 	}
 };
@@ -176,13 +189,19 @@ public:
 	{
 		std::cout << "Memestoner " << name << " enters the ring.\n";
 	}
+	~MemeStoner() override
+	{
+		std::cout << "MemStoner destructed\n";
+
+	}
 	void SpecialMove(MemeFighter& target) override
 	{
 		if (this->IsAlive())
 		{
-			std::cout << "======================================================newturn\n";
+			std::cout << "======================================================\n";
 			if (Roll() <= 3)
 			{
+				std::cout << *this << " special move succeeded, added hp (+" << 10 << ") ,speed (+" << 3 << "), power (*" << 69.0f/42.0f << ") \n";
 				this->Add("*", 10, 3, 69.0f/42.0f );
 			}
 			else
