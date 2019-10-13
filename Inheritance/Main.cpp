@@ -9,7 +9,7 @@ void TakeWeaponIfDead(MemeFighter& taker, MemeFighter& giver)
 	{
 		if (taker.GetWeapon().GetRank() < giver.GetWeapon().GetRank())
 		{
-			std::cout << taker << " takes the " << giver.GetWeapon().GetName() << " from " << giver << "'s still cooling body.\nOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n";
+			std::cout << taker << " takes the " << giver.GetWeapon().GetName() << " from " << giver << "'s still cooling body.\nOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n";
 			taker.GiveWeapon(giver.PilferWeapon());
 		}
 	}

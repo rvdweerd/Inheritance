@@ -28,14 +28,8 @@ struct Attributes
 class Weapon
 {
 public:
-	const std::string& GetName() const
-	{
-		return name;
-	}
-	const int GetRank() const
-	{
-		return rank;
-	}
+	virtual const std::string& GetName() const = 0;
+	virtual const int GetRank() const = 0;
 	virtual int CalculateDamage(const Attributes& attr, Dice& d) const = 0;
 	virtual ~Weapon()
 	{}
@@ -58,7 +52,15 @@ public:
 		Weapon("Fist", 0)
 	{}
 	~Fist() override = default;
-	virtual int CalculateDamage(const Attributes& attr, Dice& d) const 
+	virtual const std::string& GetName() const override
+	{
+		return name;
+	}
+	virtual const int GetRank() const override
+	{
+		return rank;
+	}
+	virtual int CalculateDamage(const Attributes& attr, Dice& d) const override
 	{
 		return attr.power + d.Roll(2);
 	}
@@ -72,7 +74,15 @@ public:
 		Weapon("Knife", 2)
 	{}
 	~Knife() override = default;
-	int CalculateDamage(const Attributes& attr, Dice& d) const 
+	virtual const std::string& GetName() const override
+	{
+		return name;
+	}
+	virtual const int GetRank() const override
+	{
+		return rank;
+	}
+	int CalculateDamage(const Attributes& attr, Dice& d) const override
 	{
 		return attr.speed * 3 + d.Roll(3);
 	}
@@ -86,6 +96,14 @@ public:
 		Weapon("Bat", 1)
 	{}
 	~Bat() override = default;
+	virtual const std::string& GetName() const override
+	{
+		return name;
+	}
+	virtual const int GetRank() const override
+	{
+		return rank;
+	}
 	int CalculateDamage(const Attributes& attr, Dice& d) const 
 	{
 		return attr.power*2+d.Roll(1);
