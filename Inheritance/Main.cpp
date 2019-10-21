@@ -14,7 +14,6 @@ void TakeWeaponIfDead(MemeFighter& taker, MemeFighter& giver)
 		}
 	}
 }
-
 void Engage( MemeFighter& f1,MemeFighter& f2 )
 {
 	// pointers for sorting purposes
@@ -52,7 +51,7 @@ void EngageSpecial(MemeFighter& f1, MemeFighter& f2)
 
 int main()
 {
-	Weapon* pW = new Fist();
+	//Weapon* pW = new Fist();
 
 	std::vector<MemeFighter*> team1 = { 
 		new MemeFrog{"M Kermit The Frog", new Knife{} },

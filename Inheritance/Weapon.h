@@ -31,8 +31,7 @@ public:
 	virtual const std::string& GetName() const = 0;
 	virtual const int GetRank() const = 0;
 	virtual int CalculateDamage(const Attributes& attr, Dice& d) const = 0;
-	virtual ~Weapon()
-	{}
+	virtual ~Weapon() = default;
 protected:
 	Weapon(std::string name, int rank)
 		:
