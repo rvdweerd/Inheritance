@@ -60,9 +60,6 @@ public:
 
 int main()
 {
-	//Weapon* pW = new Fist();
-
-	//auto team1 = std::make_unique<MemeFighter[]>(3);
 	std::vector<std::unique_ptr<MemeFighter>> team1;
 	team1.emplace_back(std::make_unique<MemeFrog>("M Kermit The Frog", new Knife));
 	team1.emplace_back(std::make_unique<MemeStoner>("M Sharon Stone", new Fist));
@@ -73,8 +70,7 @@ int main()
 	team2.emplace_back(std::make_unique<MemeFrog>("P Trump the Frog", new Fist));
 	team2.emplace_back(std::make_unique<MemeFrog>("P Rutte The Frog", new Bat));
 	
-
-	const auto alive_pred = [](const std::unique_ptr<MemeFighter>& mf)->bool {return mf->IsAlive(); };
+		const auto alive_pred = [](const std::unique_ptr<MemeFighter>& mf)->bool {return mf->IsAlive(); };
 	while(
 		std::any_of(team1.begin(),team1.end(), alive_pred) && 
 		std::any_of(team2.begin(), team2.end(), alive_pred) )

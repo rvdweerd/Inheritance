@@ -9,12 +9,6 @@
 class MemeFighter
 {
 public:
-	virtual ~MemeFighter()
-	{
-		std::cout << "Destructing MemFighter " << name << std::endl;
-		delete pWeapon;
-		pWeapon = nullptr;
-	}
 	std::string GetName() const
 	{
 		return name;
@@ -79,16 +73,13 @@ public:
 	{
 		return *pWeapon;
 	}
-	void GiveWeapon(Weapon* pNewWeapon)
+	void GiveWeapon(std::unique_ptr<Weapon> pNewWeapon)
 	{
-		delete pWeapon;
-		pWeapon = pNewWeapon;
+		pWeapon = std::move(pNewWeapon);
 	}
-	Weapon* PilferWeapon()
+	std::unique_ptr<Weapon> PilferWeapon()
 	{
-		auto pWep = pWeapon;
-		pWeapon = nullptr;
-		return pWep;
+		return std::move(pWeapon);
 	}
 protected:
 	MemeFighter(const std::string& name, int hp, int speed, int power, Weapon* pWeapon = nullptr)
@@ -117,7 +108,7 @@ protected:
 		return dice.Roll(nDice);
 	}
 private:
-	Weapon* pWeapon = nullptr;
+	std::unique_ptr<Weapon> pWeapon;
 	mutable Dice dice;
 };
 
@@ -135,11 +126,6 @@ public:
 		MemeFighter(name, 69, 7, 14, pWeapon )
 	{
 		std::cout << "Memefrog " << name << " enters the ring.\n";
-	}
-	~MemeFrog() override
-	{
-		std::cout << "MemFrog destructed\n";
-
 	}
 	void Tick() override
 	{
@@ -193,11 +179,6 @@ public:
 		MemeFighter(name, 80, 4, 10, pWeapon )
 	{
 		std::cout << "Memestoner " << name << " enters the ring.\n";
-	}
-	~MemeStoner() override
-	{
-		std::cout << "MemStoner destructed\n";
-
 	}
 	void SpecialMove(MemeFighter& target) override
 	{
