@@ -61,14 +61,14 @@ public:
 int main()
 {
 	std::vector<std::unique_ptr<MemeFighter>> team1;
-	team1.emplace_back(std::make_unique<MemeFrog>("M Kermit The Frog", new Knife));
-	team1.emplace_back(std::make_unique<MemeStoner>("M Sharon Stone", new Fist));
-	team1.emplace_back(std::make_unique<MemeStoner>("M Sylvester Stonone", new Bat));
+	team1.emplace_back(std::make_unique<MemeFrog>("M Kermit The Frog", std::make_unique<Knife>()) );
+	team1.emplace_back(std::make_unique<MemeStoner>("M Sharon Stone", std::make_unique<Fist>()));
+	team1.emplace_back(std::make_unique<MemeStoner>("M Sylvester Stonone", std::make_unique<Bat>()));
 	
 	std::vector<std::unique_ptr<MemeFighter>> team2;
-	team2.emplace_back(std::make_unique<MemeFrog>("P Boris Frogston", new Knife));
-	team2.emplace_back(std::make_unique<MemeFrog>("P Trump the Frog", new Fist));
-	team2.emplace_back(std::make_unique<MemeFrog>("P Rutte The Frog", new Bat));
+	team2.emplace_back(std::make_unique<MemeFrog>("P Boris Frogston", std::make_unique<Knife>()) );
+	team2.emplace_back(std::make_unique<MemeFrog>("P Trump the Frog", std::make_unique<Fist>()) );
+	team2.emplace_back(std::make_unique<MemeFrog>("P Rutte The Frog", std::make_unique<Bat>()) );
 	
 		const auto alive_pred = [](const std::unique_ptr<MemeFighter>& mf)->bool {return mf->IsAlive(); };
 	while(

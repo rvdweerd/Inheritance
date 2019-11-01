@@ -82,11 +82,11 @@ public:
 		return std::move(pWeapon);
 	}
 protected:
-	MemeFighter(const std::string& name, int hp, int speed, int power, Weapon* pWeapon = nullptr)
+	MemeFighter(const std::string& name, int hp, int speed, int power, std::unique_ptr<Weapon> pWeapon)
 		:
 		name(name),
 		attr({ hp,speed,power }),
-		pWeapon(pWeapon)
+		pWeapon(std::move(pWeapon))
 	{
 		//pWeapon = new Knife();
 	}
@@ -121,9 +121,9 @@ std::ostream& operator<<(std::ostream& os, const MemeFighter& mf)
 class MemeFrog : public MemeFighter
 {
 public:
-	MemeFrog(const std::string& name, Weapon* pWeapon = nullptr)
+	MemeFrog(const std::string& name, std::unique_ptr<Weapon> pWeapon)
 		:
-		MemeFighter(name, 69, 7, 14, pWeapon )
+		MemeFighter(name, 69, 7, 14, std::move(pWeapon) )
 	{
 		std::cout << "Memefrog " << name << " enters the ring.\n";
 	}
@@ -174,9 +174,9 @@ public:
 class MemeStoner : public MemeFighter
 {
 public:
-	MemeStoner(const std::string& name, Weapon* pWeapon = nullptr)
+	MemeStoner(const std::string& name, std::unique_ptr<Weapon> pWeapon)
 		:
-		MemeFighter(name, 80, 4, 10, pWeapon )
+		MemeFighter(name, 80, 4, 10, std::move(pWeapon) )
 	{
 		std::cout << "Memestoner " << name << " enters the ring.\n";
 	}
