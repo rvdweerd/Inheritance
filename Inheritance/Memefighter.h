@@ -4,6 +4,7 @@
 #include <conio.h>
 #include <random>
 #include "Weapon.h"
+#include <memory>
 
 class MemeFighter
 {

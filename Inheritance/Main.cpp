@@ -1,7 +1,9 @@
+#pragma once
 #include "Memefighter.h"
 #include <algorithm>
 #include <vector>
 #include <random>
+#include <memory>
 
 void TakeWeaponIfDead(MemeFighter& taker, MemeFighter& giver)
 {
@@ -49,20 +51,30 @@ void EngageSpecial(MemeFighter& f1, MemeFighter& f2)
 
 }
 
+class test {
+public:
+	int x;
+	int y;
+	int* pInt;
+};
+
 int main()
 {
 	//Weapon* pW = new Fist();
 
-	std::vector<MemeFighter*> team1 = { 
-		new MemeFrog{"M Kermit The Frog", new Knife{} },
-		new MemeStoner("M Sharon Stone", new Fist ), 
-		new MemeStoner("M Sylvester Stonone", new Bat ) };
-	std::vector<MemeFighter*> team2 = { 
-		new MemeFrog("P Boris Frogston", new Knife()), 
-		new MemeFrog("P Trump The Frog", new Fist()), 
-		new MemeFrog("P Rutte The Frog", new Bat()) };
+	//auto team1 = std::make_unique<MemeFighter[]>(3);
+	std::vector<std::unique_ptr<MemeFighter>> team1;
+	team1.emplace_back(std::make_unique<MemeFrog>("M Kermit The Frog", new Knife));
+	team1.emplace_back(std::make_unique<MemeStoner>("M Sharon Stone", new Fist));
+	team1.emplace_back(std::make_unique<MemeStoner>("M Sylvester Stonone", new Bat));
+	
+	std::vector<std::unique_ptr<MemeFighter>> team2;
+	team2.emplace_back(std::make_unique<MemeFrog>("P Boris Frogston", new Knife));
+	team2.emplace_back(std::make_unique<MemeFrog>("P Trump the Frog", new Fist));
+	team2.emplace_back(std::make_unique<MemeFrog>("P Rutte The Frog", new Bat));
+	
 
-	const auto alive_pred = [](MemeFighter* mf)->bool {return mf->IsAlive(); };
+	const auto alive_pred = [](const std::unique_ptr<MemeFighter>& mf)->bool {return mf->IsAlive(); };
 	while(
 		std::any_of(team1.begin(),team1.end(), alive_pred) && 
 		std::any_of(team2.begin(), team2.end(), alive_pred) )
@@ -130,21 +142,6 @@ int main()
 		std::cout << "Team 2 is victorious!, with" << *team2[0] << *team2[1] << *team2[2] << std::endl;
 		std::cout << "Team 1: " << *team1[0] << *team1[1] << *team1[2] << std::endl;
 
-	}
-
-	//Free the memory
-	//for (MemeFighter* m : team1)
-	//{
-	//	delete m;
-	//}
-	//for (MemeFighter* m : team2)
-	//{
-	//	delete m;
-	//}
-	for (size_t i = 0; i < team1.size(); i++)
-	{
-		delete team1[i];
-		delete team2[i];
 	}
 
 	while( !_kbhit() );
